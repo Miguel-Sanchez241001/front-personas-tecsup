@@ -1,5 +1,4 @@
-// URL base configurada en .env.local — ver README.md sección "Configurar la URL del backend"
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import API_BASE_URL from '../config/config.js';
 
 const JSON_HEADERS = { 'Content-Type': 'application/json' };
 
@@ -10,14 +9,14 @@ async function handleResponse(res) {
   }
 }
 
-export async function getUsuarios() {
-  const res = await fetch(`${BASE_URL}/usuarios`);
+export async function getPersonas() {
+  const res = await fetch(`${API_BASE_URL}/personas`);
   await handleResponse(res);
   return res.json();
 }
 
-export async function createUsuario(data) {
-  const res = await fetch(`${BASE_URL}/usuarios`, {
+export async function createPersona(data) {
+  const res = await fetch(`${API_BASE_URL}/personas`, {
     method: 'POST',
     headers: JSON_HEADERS,
     body: JSON.stringify(data),
@@ -25,8 +24,8 @@ export async function createUsuario(data) {
   await handleResponse(res);
 }
 
-export async function updateUsuario(id, data) {
-  const res = await fetch(`${BASE_URL}/usuarios/${id}`, {
+export async function updatePersona(id, data) {
+  const res = await fetch(`${API_BASE_URL}/personas/${id}`, {
     method: 'PUT',
     headers: JSON_HEADERS,
     body: JSON.stringify(data),
@@ -34,7 +33,7 @@ export async function updateUsuario(id, data) {
   await handleResponse(res);
 }
 
-export async function deleteUsuario(id) {
-  const res = await fetch(`${BASE_URL}/usuarios/${id}`, { method: 'DELETE' });
+export async function deletePersona(id) {
+  const res = await fetch(`${API_BASE_URL}/personas/${id}`, { method: 'DELETE' });
   await handleResponse(res);
 }

@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
-import UserList from './components/UserList';
-import UserForm from './components/UserForm';
+import PersonaList from './components/PersonaList';
+import PersonaForm from './components/PersonaForm';
 import alerta from './utils/alerta';
-import { getUsuarios, createUsuario, updateUsuario, deleteUsuario } from './services/api';
+import { getPersonas, createPersona, updatePersona, deletePersona } from './services/api';
 
 function App() {
-  const [usuarios, setUsuarios] = useState([]);
+  const [personas, setPersonas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editingUser, setEditingUser] = useState(null);
+  const [editingPersona, setEditingPersona] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
-  const cargarUsuarios = async () => {
+  const cargarPersonas = async () => {
     try {
       setLoading(true);
-      const data = await getUsuarios();
-      setUsuarios(data);
+      const data = await getPersonas();
+      setPersonas(data);
     } catch (err) {
       alerta.error('No se pudo conectar con el servidor.');
     } finally {
@@ -23,62 +23,60 @@ function App() {
   };
 
   useEffect(() => {
-    cargarUsuarios();
+    cargarPersonas();
   }, []);
 
   const handleNuevo = () => {
-    setEditingUser(null);
+    setEditingPersona(null);
     setShowForm(true);
   };
 
-  const handleEditar = (usuario) => {
-    setEditingUser(usuario);
+  const handleEditar = (persona) => {
+    setEditingPersona(persona);
     setShowForm(true);
   };
 
   const handleEliminar = async (id) => {
     const resultado = await alerta.confirmarEliminar();
-
     if (!resultado.isConfirmed) return;
-
     try {
-      await deleteUsuario(id);
-      await cargarUsuarios();
-      alerta.exito('Usuario eliminado correctamente.');
+      await deletePersona(id);
+      await cargarPersonas();
+      alerta.exito('Persona eliminada correctamente.');
     } catch (err) {
       alerta.error(err.message);
     }
   };
 
   const handleSubmit = async (data) => {
-    if (editingUser) {
-      await updateUsuario(editingUser.id, data);
-      alerta.exito('Usuario actualizado correctamente.');
+    if (editingPersona) {
+      await updatePersona(editingPersona.id, data);
+      alerta.exito('Persona actualizada correctamente.');
     } else {
-      await createUsuario(data);
-      alerta.exito('Usuario creado correctamente.');
+      await createPersona(data);
+      alerta.exito('Persona creada correctamente.');
     }
     setShowForm(false);
-    setEditingUser(null);
-    await cargarUsuarios();
+    setEditingPersona(null);
+    await cargarPersonas();
   };
 
   const handleCancelar = () => {
     setShowForm(false);
-    setEditingUser(null);
+    setEditingPersona(null);
   };
 
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Gestión de Usuarios</h1>
-        <p className="app-subtitulo">API CRUD — Examen Final Tecsup</p>
+        <h1>Gestión de Personas</h1>
+        <p className="app-subtitulo">API CRUD — Tecsup</p>
       </header>
 
       <main className="app-main">
         {showForm ? (
-          <UserForm
-            editingUser={editingUser}
+          <PersonaForm
+            editingPersona={editingPersona}
             onSubmit={handleSubmit}
             onCancelar={handleCancelar}
           />
@@ -86,14 +84,14 @@ function App() {
           <>
             <div className="barra-herramientas">
               <h2 className="conteo">
-                {loading ? 'Cargando...' : `${usuarios.length} usuario(s) registrado(s)`}
+                {loading ? 'Cargando...' : `${personas.length} persona(s) registrada(s)`}
               </h2>
               <button className="btn btn-primario" onClick={handleNuevo}>
-                + Nuevo usuario
+                + Nueva persona
               </button>
             </div>
-            <UserList
-              usuarios={usuarios}
+            <PersonaList
+              personas={personas}
               loading={loading}
               onEditar={handleEditar}
               onEliminar={handleEliminar}

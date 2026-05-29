@@ -18,7 +18,7 @@ const alerta = {
 
   confirmarEliminar: () =>
     Swal.fire({
-      title: '¿Eliminar usuario?',
+      title: '¿Eliminar persona?',
       text: 'Esta acción no se puede deshacer.',
       icon: 'warning',
       showCancelButton: true,
